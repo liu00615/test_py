@@ -7,10 +7,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # 配置数据库连接
 db_config = {
-    "host": "localhost",  # 数据库地址
-    "user": "root",  # 用户名
-    "password": "123456",  # 密码
-    "database": "graduation"  # 数据库名称
+    "host": "localhost",
+    "user": "root",
+    "password": "123456",
+    "database": "graduation"
 }
 
 # 连接数据库
