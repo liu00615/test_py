@@ -10,7 +10,7 @@ db_config = {
     "user": "root",
     "password": "123456",
     "database": "graduation",
-    "connection_timeout": 300  # 解决数据库超时问题
+    "connection_timeout": 300
 }
 
 # 目标数据集文件夹
