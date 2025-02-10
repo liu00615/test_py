@@ -26,7 +26,7 @@ cursor.execute("""
         id INT AUTO_INCREMENT PRIMARY KEY,
         image_path VARCHAR(255) NOT NULL,
         hsv_moments TEXT NOT NULL,
-        color_histogram MEDIUMTEXT NOT NULL  # 允许更大的存储空间
+        color_histogram MEDIUMTEXT NOT NULL  
     )
 """)
 
@@ -36,6 +36,7 @@ cursor.execute("ALTER TABLE color AUTO_INCREMENT = 1;")
 conn.commit()
 
 print("数据库表 color 已清空，准备插入新数据...")
+
 
 # 提取 HSV 中心矩特征
 def extract_hsv_moments(image_path):
@@ -53,6 +54,7 @@ def extract_hsv_moments(image_path):
     hsv_moments = cv2.HuMoments(moments).flatten()
     return hsv_moments
 
+
 # 提取颜色直方图特征（调整为 48 维）
 def extract_color_histogram(image_path):
     image = cv2.imread(image_path)
@@ -61,12 +63,13 @@ def extract_color_histogram(image_path):
         return None
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # 使用 6 个 bins（每个通道分别使用 6 个 bins），总共 6 * 6 * 6 = 216 维
+    # 每个通道分别使用 6 个 bins，总共 6 * 6 * 6 = 216 维
     hist = cv2.calcHist([hsv_image], [0, 1, 2], None, [6, 6, 6], [0, 180, 0, 256, 0, 256])
     hist = cv2.normalize(hist, hist).flatten()  # 归一化并展平为一维数组
 
     # 固定使用 48 维特征
     return hist[:48]  # 保证提取48维特征
+
 
 # 遍历所有子文件夹
 for root, _, files in os.walk(base_folder):
