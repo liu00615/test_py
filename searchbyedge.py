@@ -18,7 +18,7 @@ conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
 # 定义 Flask Blueprint
-search_by_edge_route = Blueprint('search_by_edge', __name__)
+search_by_edge_route = Blueprint('searchbyedge', __name__)
 
 # 提取 Hu 不变矩特征
 def extract_hu_moments(image):
