@@ -14,7 +14,7 @@ db_config = {
 }
 
 # 目标数据集文件夹
-base_folder = "data/256_ObjectCategories"
+base_folder = "../data/256_ObjectCategories"
 
 # 连接数据库
 conn = mysql.connector.connect(**db_config)
