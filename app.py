@@ -5,6 +5,7 @@ from searchbytexture import search_by_texture_route
 from searchbysift import search_by_sift_route
 from searchbyvgg import search_by_vgg_route
 from searchbyvgg_keras import search_by_vgg_keras_route
+from searchbyhash import search_by_hash_route
 
 import config  # 导入配置文件
 
@@ -17,6 +18,7 @@ app.register_blueprint(search_by_texture_route)
 app.register_blueprint(search_by_sift_route)
 app.register_blueprint(search_by_vgg_route)
 app.register_blueprint(search_by_vgg_keras_route)
+app.register_blueprint(search_by_hash_route)
 
 if __name__ == '__main__':
     # 使用 config.py 中的 HOST 和 PORT 启动 Flask 应用
