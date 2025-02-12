@@ -1,13 +1,13 @@
-import json
 import pickle
 
 import cv2
-import numpy as np
 import mysql.connector
+import numpy as np
+from flask import Flask, request, jsonify, Blueprint
+from scipy.spatial.distance import cdist
 from tensorflow.keras import Model
 from tensorflow.keras import layers
-from scipy.spatial.distance import cdist
-from flask import Flask, request, jsonify, Blueprint
+
 # from vggFeature import build_vgg16 # 导入会出发vggFeature自动执行，舍弃
 
 # 数据库连接配置

@@ -1,13 +1,9 @@
-import json
 import os
-import numpy as np
-import mysql.connector
-
-from keras.src.applications.vgg16 import VGG16
-from keras.api.preprocessing import image
-from keras.src.applications.vgg16 import preprocess_input
 import pickle
-
+import mysql.connector
+import numpy as np
+from keras.api.preprocessing import image
+from keras.src.applications.vgg16 import VGG16
 from tensorflow.keras import Model
 from tensorflow.keras import layers
 
@@ -45,6 +41,9 @@ print("数据库表 vgg_keras 已清空，准备插入新数据...")
 
 # 加载预训练的 VGG16 模型
 def build_vgg16(input_shape=(224, 224, 3)):
+    """
+    加载 VGG16 模型，去掉顶层全连接层，用于特征提取。
+    """
     base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     # 提取卷积层的输出作为特征
     x = layers.GlobalAveragePooling2D()(base_model.output)
@@ -56,6 +55,9 @@ vgg16_model = build_vgg16()
 
 # 提取图像的特征
 def extract_vgg16_features(image_path):
+    """
+    提取指定图像的 VGG16 特征
+    """
     # 加载并预处理图像
     img = image.load_img(image_path, target_size=(224, 224))  # 调整为模型输入大小
     img_array = image.img_to_array(img)  # 转换为数组
@@ -75,7 +77,7 @@ for root, _, files in os.walk(base_folder):
             # 提取 VGG16 特征
             vgg16_features = extract_vgg16_features(image_path)
 
-            # 使用 pickle 库序列化特征
+            # 使用 pickle 序列化特征
             vgg16_features_serialized = pickle.dumps(vgg16_features)
 
             # 获取相对路径
