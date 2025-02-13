@@ -1,15 +1,15 @@
 # 使用纹理特征搜索，包括灰度共生矩阵和LBP特征
-from flask import Blueprint, request, jsonify
+import json
+
+import cv2
 import mysql.connector
 import numpy as np
-import json
-import cv2
-from skimage.feature import local_binary_pattern
+from flask import Blueprint, request, jsonify
 from skimage.feature import graycomatrix, graycoprops
-import io
+from skimage.feature import local_binary_pattern
 from werkzeug.utils import secure_filename
 
-# 创建 Flask 蓝图
+# 创建Flask蓝图
 search_by_texture_route = Blueprint('searchbytexture', __name__)
 
 # 数据库连接配置
@@ -21,8 +21,12 @@ db_config = {
     "connection_timeout": 300
 }
 
+# 连接到数据库
+def get_db_connection():
+    return mysql.connector.connect(**db_config)
 
-# 特征提取函数
+
+# 特征提取函数（glcm）
 def extract_glcm_features(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     glcm = graycomatrix(gray_image, [1], [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4], symmetric=True, normed=True)
@@ -33,6 +37,7 @@ def extract_glcm_features(image):
     return [contrast, correlation, energy, homogeneity]
 
 
+# 特征提取函数（lbp）
 def extract_lbp_features(image, radius=1, n_points=8):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     lbp = local_binary_pattern(gray_image, n_points, radius, method='uniform')
@@ -42,14 +47,9 @@ def extract_lbp_features(image, radius=1, n_points=8):
     return lbp_hist
 
 
-# 计算两个特征向量的相似度（欧几里得距离）
+# 计算相似度（欧几里得距离）
 def compute_similarity(query_feature, db_feature):
     return np.linalg.norm(np.array(query_feature) - np.array(db_feature))
-
-
-# 连接到数据库
-def get_db_connection():
-    return mysql.connector.connect(**db_config)
 
 
 # 查询数据库获取图像特征
@@ -63,7 +63,7 @@ def get_database_features():
     return rows
 
 
-# 主查询函数
+# 查询函数
 def run_search(query_image):
     # 提取查询图像的纹理特征
     query_glcm_features = extract_glcm_features(query_image)
@@ -81,11 +81,11 @@ def run_search(query_image):
         glcm_features = json.loads(glcm_json)
         lbp_features = np.array(json.loads(lbp_json))
 
-        # 计算 GLCM 特征的相似度
+        # 计算GLCM特征的相似度
         glcm_similarity = compute_similarity(query_glcm_features, glcm_features)
         results["glcm"].append({"image_path": image_path, "similarity": glcm_similarity})
 
-        # 计算 LBP 特征的相似度
+        # 计算LBP特征的相似度
         lbp_similarity = compute_similarity(query_lbp_features, lbp_features)
         results["lbp"].append({"image_path": image_path, "similarity": lbp_similarity})
 
@@ -111,7 +111,7 @@ def search_by_texture():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
-    # 安全保存上传的文件
+    # 获取图像
     filename = secure_filename(file.filename)
     img_bytes = file.read()
     img_array = np.frombuffer(img_bytes, np.uint8)

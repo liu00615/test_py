@@ -1,10 +1,10 @@
 import os
 import pickle
+
 import mysql.connector
 import numpy as np
-from keras.api.preprocessing import image
 from PIL import Image
-from scipy.fftpack import dct  # 导入 DCT 变换函数
+from scipy.fftpack import dct  # 导入DCT变换函数
 
 # 数据库连接配置
 db_config = {
@@ -15,14 +15,14 @@ db_config = {
     "connection_timeout": 300
 }
 
-# 获取特征的目标数据集文件夹路径
+# 目标数据集文件夹
 base_folder = "../data/256_ObjectCategories"
 
 # 连接数据库
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在
+# 新建数据表
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS hash (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,7 +33,7 @@ cursor.execute("""
     )
 """)
 
-# 清空 hash 表
+# 清空hash表
 cursor.execute("DELETE FROM hash;")
 cursor.execute("ALTER TABLE hash AUTO_INCREMENT = 1;")
 conn.commit()
@@ -76,7 +76,7 @@ def extract_hash_features(image_path):
     d_hash = difference_hash(image_path)
     p_hash = perceptual_hash(image_path)
 
-    # 使用 pickle 序列化特征
+    # 使用pickle序列化特征
     a_hash_serialized = pickle.dumps(a_hash)
     d_hash_serialized = pickle.dumps(d_hash)
     p_hash_serialized = pickle.dumps(p_hash)

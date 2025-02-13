@@ -1,8 +1,8 @@
-import os
-import cv2
-import numpy as np
-import mysql.connector
 import json
+import os
+
+import cv2
+import mysql.connector
 
 # 配置数据库连接
 db_config = {
@@ -20,7 +20,7 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在（使用 MEDIUMTEXT 存储颜色直方图特征）
+# 新建数据表 使用MEDIUMTEXT存储颜色直方图特征
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS color (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,7 +30,7 @@ cursor.execute("""
     )
 """)
 
-# **清空 color 表**
+# 清空color表，方便调试
 cursor.execute("DELETE FROM color;")
 cursor.execute("ALTER TABLE color AUTO_INCREMENT = 1;")
 conn.commit()
@@ -55,7 +55,7 @@ def extract_hsv_moments(image_path):
     return hsv_moments
 
 
-# 提取颜色直方图特征（调整为 48 维）
+# 提取颜色直方图特征（48维）
 def extract_color_histogram(image_path):
     image = cv2.imread(image_path)
     if image is None:
@@ -63,12 +63,11 @@ def extract_color_histogram(image_path):
         return None
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # 每个通道分别使用 6 个 bins，总共 6 * 6 * 6 = 216 维
+    # 每个通道6bins，共6*6*6=216维
     hist = cv2.calcHist([hsv_image], [0, 1, 2], None, [6, 6, 6], [0, 180, 0, 256, 0, 256])
     hist = cv2.normalize(hist, hist).flatten()  # 归一化并展平为一维数组
 
-    # 固定使用 48 维特征
-    return hist[:48]  # 保证提取48维特征
+    return hist[:48]  # 48维特征
 
 
 # 遍历所有子文件夹
@@ -77,7 +76,7 @@ for root, _, files in os.walk(base_folder):
         if filename.lower().endswith((".jpg", ".png", ".jpeg")):
             image_path = os.path.join(root, filename)
 
-            # 提取 HSV 中心矩特征
+            # 提取HSV中心矩特征
             hsv_moments = extract_hsv_moments(image_path)
             if hsv_moments is None:
                 continue
@@ -87,11 +86,11 @@ for root, _, files in os.walk(base_folder):
             if color_histogram is None:
                 continue
 
-            # 转换为 JSON 存储
+            # 转换为JSON存储
             hsv_moments_json = json.dumps(hsv_moments.tolist())
             color_histogram_json = json.dumps(color_histogram.tolist())
 
-            # 存储图像的路径、HSV 中心矩特征和颜色直方图特征
+            # 存储图像的路径、HSV中心矩特征和颜色直方图特征
             relative_path = os.path.relpath(image_path, base_folder)
             cursor.execute("INSERT INTO color (image_path, hsv_moments, color_histogram) VALUES (%s, %s, %s)",
                            (relative_path, hsv_moments_json, color_histogram_json))

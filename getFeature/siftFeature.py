@@ -1,8 +1,8 @@
 import os
-import cv2
-import numpy as np
-import mysql.connector
 import pickle
+
+import cv2
+import mysql.connector
 
 # 数据库连接配置
 db_config = {
@@ -20,7 +20,7 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在
+# 新建数据表
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS sift (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,18 +29,18 @@ cursor.execute("""
     )
 """)
 
-# **清空 sift 表**
+# 清空sift表
 cursor.execute("DELETE FROM sift;")
 cursor.execute("ALTER TABLE sift AUTO_INCREMENT = 1;")
 conn.commit()
 
 print("数据库表 sift 已清空，准备插入新数据...")
 
-# 初始化 SIFT 算法
+# 初始化SIFT算法
 sift = cv2.SIFT_create()
 
 
-# 提取 SIFT 特征的函数
+# 提取SIFT特征的函数
 def extract_sift_features(image):
     # 将图像转换为灰度图像
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -63,18 +63,18 @@ for root, _, files in os.walk(base_folder):
                 print(f"无法读取图像: {image_path}")
                 continue
 
-            # 提取 SIFT 特征
+            # 提取SIFT特征
             sift_features = extract_sift_features(image)
 
-            # 如果没有检测到特征点，则跳过
+            # 没有检测到特征点 跳过
             if sift_features is None:
                 print(f"图像 {image_path} 没有检测到特征点，跳过...")
                 continue
 
-            # 使用 pickle 将 SIFT 特征序列化
+            # 使用pickle将SIFT特征序列化
             sift_features_pickle = pickle.dumps(sift_features)
 
-            # 存储图像的路径和序列化的 SIFT 特征
+            # 存储图像的路径和序列化的SIFT特征
             relative_path = os.path.relpath(image_path, base_folder)
             cursor.execute("""
                 INSERT INTO sift (image_path, sift_features)

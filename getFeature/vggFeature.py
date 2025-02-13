@@ -1,9 +1,9 @@
-import json
 import os
+import pickle
+
 import cv2
 import mysql.connector
 import numpy as np
-import pickle
 from tensorflow.keras import Model
 from tensorflow.keras import layers
 
@@ -23,7 +23,7 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在
+# 新建数据表
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS vgg (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,14 +32,14 @@ cursor.execute("""
     )
 """)
 
-# **清空 vgg 表**
+# 清空vgg表
 cursor.execute("DELETE FROM vgg;")
 cursor.execute("ALTER TABLE vgg AUTO_INCREMENT = 1;")
 conn.commit()
 
 print("数据库表 vgg 已清空，准备插入新数据...")
 
-# 手动构建 VGG16 模型
+# 自定义模型
 def build_vgg16(input_shape=(224, 224, 3), num_classes=1000):
     # 创建输入层
     inputs = layers.Input(shape=input_shape)
@@ -97,7 +97,7 @@ def extract_vgg16_features(image):
     img_resized = cv2.resize(image, (224, 224))  # 调整图像大小
     img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)  # 转换为 RGB
 
-    # 将图像数组扩展为 (1, 224, 224, 3) 以符合模型输入
+    # 将图像数组扩展为(1, 224, 224, 3)适应模型输入
     img_array = np.expand_dims(img_rgb, axis=0)  # 增加批次维度
     img_array = img_array / 255.0  # 归一化
 
@@ -117,13 +117,13 @@ for root, _, files in os.walk(base_folder):
                 print(f"无法读取图像: {image_path}")
                 continue
 
-            # 提取 VGG16 特征
+            # 提取VGG16特征
             vgg16_features = extract_vgg16_features(image)
 
-            # 使用 pickle 序列化特征
+            # 使用pickle序列化特征
             serialized_features = pickle.dumps(vgg16_features)
 
-            # 存储图像的路径和 VGG16 特征
+            # 存储图像的路径和VGG16特征
             relative_path = os.path.relpath(image_path, base_folder)
             cursor.execute("INSERT INTO vgg (image_path, vgg_features) VALUES (%s, %s)",
                            (relative_path, serialized_features))

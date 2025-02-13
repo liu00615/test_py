@@ -5,7 +5,7 @@ from PIL import Image
 from flask import Blueprint, request, jsonify
 from scipy.fftpack import dct
 
-# 创建蓝图
+# 定义Flask蓝图
 search_by_hash_route = Blueprint('searchbyhash', __name__)
 
 # 数据库连接配置
@@ -17,17 +17,19 @@ db_config = {
     "connection_timeout": 300
 }
 
+# 连接数据库
+conn = mysql.connector.connect(**db_config)
+cursor = conn.cursor()
+
 # 加载哈希特征的数据库表
 def load_hash_features():
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
     cursor.execute("SELECT id, image_path, aHash, dHash, pHash FROM hash")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
     return rows
 
-# 哈希方法的计算函数（用于前端上传的图像）
+# 哈希方法的计算函数
 def average_hash(img, hash_size=8):
     img = img.convert('L')
     img = img.resize((hash_size, hash_size), Image.Resampling.LANCZOS)
@@ -46,11 +48,11 @@ def difference_hash(img, hash_size=9):
 def perceptual_hash(img, hash_size=32):
     img = img.convert('L')  # 转为灰度图像
     img = img.resize((hash_size, hash_size), Image.Resampling.LANCZOS)  # 调整图像大小
-    pixels = np.array(img)  # 转换为 NumPy 数组
+    pixels = np.array(img)  # 转换为NumPy数组
 
-    # 进行 DCT 变换
-    dct_result = dct(pixels, axis=0)  # 沿着列方向进行 DCT
-    dct_result = dct(dct_result, axis=1)  # 沿着行方向进行 DCT
+    # 进行DCT变换
+    dct_result = dct(pixels, axis=0)  # 沿着列方向进行DCT
+    dct_result = dct(dct_result, axis=1)  # 沿着行方向进行DCT
 
     # 获取低频部分（8x8块）
     dct_low_freq = dct_result[:8, :8]

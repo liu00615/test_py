@@ -1,11 +1,11 @@
-import os
-import cv2
-import numpy as np
-import mysql.connector
 import json
-from skimage.feature import local_binary_pattern
+import os
+
+import cv2
+import mysql.connector
+import numpy as np
 from skimage.feature import graycomatrix, graycoprops  # 新版不用grey***
-from skimage import data
+from skimage.feature import local_binary_pattern
 
 # 数据库连接配置
 db_config = {
@@ -23,7 +23,7 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在
+# 新建数据表
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS texture (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,7 +33,7 @@ cursor.execute("""
     )
 """)
 
-# **清空 texture 表**
+# 清空texture表
 cursor.execute("DELETE FROM texture;")
 cursor.execute("ALTER TABLE texture AUTO_INCREMENT = 1;")
 conn.commit()
@@ -44,10 +44,10 @@ print("数据库表 texture 已清空，准备插入新数据...")
 def extract_glcm_features(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # 计算灰度共生矩阵，考虑距离为1，方向为0度（水平）、45度、90度、135度
+    # 计算灰度共生矩阵，距离为1，方向为0度（水平）、45度、90度、135度
     glcm = graycomatrix(gray_image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4], symmetric=True, normed=True)
 
-    # 提取几个常见的灰度共生矩阵特征
+    # 几个常见的灰度共生矩阵特征
     contrast = graycoprops(glcm, 'contrast')[0, 0]
     correlation = graycoprops(glcm, 'correlation')[0, 0]
     energy = graycoprops(glcm, 'energy')[0, 0]
@@ -56,7 +56,7 @@ def extract_glcm_features(image):
     return [contrast, correlation, energy, homogeneity]
 
 
-# 提取局部二值模式（LBP）特征
+# 提取局部二值模式特征（LBP）
 def extract_lbp_features(image, radius=1, n_points=8):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     lbp = local_binary_pattern(gray_image, n_points, radius, method='uniform')
@@ -81,17 +81,17 @@ for root, _, files in os.walk(base_folder):
                 print(f"无法读取图像: {image_path}")
                 continue
 
-            # 提取 GLCM 特征
+            # 提取GLCM特征
             glcm_features = extract_glcm_features(image)
 
-            # 提取 LBP 特征
+            # 提取LBP特征
             lbp_features = extract_lbp_features(image)
 
-            # 转换为 JSON 格式存储
+            # 转换为JSON格式存储
             glcm_features_json = json.dumps(glcm_features)
             lbp_features_json = json.dumps(lbp_features.tolist())  # 将 LBPhist 转换为列表存储
 
-            # 存储图像的路径、GLCM 特征和 LBP 特征
+            # 存储图像的路径、GLCM特征和LBP特征
             relative_path = os.path.relpath(image_path, base_folder)
             cursor.execute("INSERT INTO texture (image_path, glcm_features, lbp_features) VALUES (%s, %s, %s)",
                            (relative_path, glcm_features_json, lbp_features_json))

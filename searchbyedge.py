@@ -17,10 +17,10 @@ db_config = {
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 定义 Flask Blueprint
+# 定义Flask蓝图
 search_by_edge_route = Blueprint('searchbyedge', __name__)
 
-# 提取 Hu 不变矩特征
+# 提取Hu不变矩特征
 def extract_hu_moments(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     ret, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
@@ -29,7 +29,7 @@ def extract_hu_moments(image):
     hu_moments = cv2.HuMoments(moments).flatten()
     return hu_moments
 
-# 提取 HOG 特征（降维：只取前 500 维）
+# 提取HOG特征（降维，只取前 500 维）
 def extract_hog_features(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = cv2.resize(gray, (128, 128))  # 降低计算复杂度
@@ -37,7 +37,7 @@ def extract_hog_features(image):
     hog_features = hog.compute(image)
     if hog_features is not None:
         hog_features = hog_features.flatten()
-        # 降维，只取前 500 维
+        # 降维，只取前500维
         if len(hog_features) > 500:
             hog_features = hog_features[:500]
     return hog_features
@@ -56,7 +56,7 @@ def search_by_edge():
     if query_image is None:
         return jsonify({"error": "无法读取图像"}), 400
 
-    # 提取查询图片的 Hu 不变矩和 HOG 特征
+    # 提取查询图片的Hu不变矩和HOG特征
     query_hu_moments = extract_hu_moments(query_image)
     query_hog_features = extract_hog_features(query_image)
 
@@ -71,11 +71,11 @@ def search_by_edge():
         db_hu_moments = np.array(json.loads(hu_json))
         db_hog_features = np.array(json.loads(hog_json))
 
-        # 计算 Hu 不变矩和 HOG 特征的相似度
+        # 计算Hu不变矩和HOG特征的相似度
         hu_similarity = compute_similarity(query_hu_moments, db_hu_moments)
         hog_similarity = compute_similarity(query_hog_features, db_hog_features)
 
-        # 合并 Hu 不变矩和 HOG 相似度，计算整体准确度
+        # 合并Hu不变矩和HOG相似度，计算整体准确度，此取平均
         accuracy = (hu_similarity + hog_similarity) / 2 * 100
 
         # 将结果添加到返回列表

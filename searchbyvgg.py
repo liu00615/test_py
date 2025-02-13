@@ -7,8 +7,10 @@ from flask import Flask, request, jsonify, Blueprint
 from scipy.spatial.distance import cdist
 from tensorflow.keras import Model
 from tensorflow.keras import layers
-
 # from vggFeature import build_vgg16 # 导入会出发vggFeature自动执行，舍弃
+
+# 定义Flask蓝图
+search_by_vgg_route = Blueprint('searchbyvgg', __name__)
 
 # 数据库连接配置
 db_config = {
@@ -23,10 +25,8 @@ db_config = {
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 定义 Flask Blueprint
-search_by_vgg_route = Blueprint('searchbyvgg', __name__)
 
-# 手动构建 VGG16 模型
+# 自定义VGG16模型
 def build_vgg16(input_shape=(224, 224, 3), num_classes=1000):
     # 创建输入层
     inputs = layers.Input(shape=input_shape)
@@ -80,11 +80,11 @@ vgg16_model = build_vgg16()
 
 # 提取图像的特征
 def extract_vgg16_features(image):
-    # 调整图像尺寸为 224x224 并进行预处理
+    # 调整图像尺寸为224x224并进行预处理
     img_resized = cv2.resize(image, (224, 224))  # 调整图像大小
-    img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)  # 转换为 RGB
+    img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)  # 转换为RGB
 
-    # 将图像数组扩展为 (1, 224, 224, 3) 以符合模型输入
+    # 将图像数组扩展为(1, 224, 224, 3)以符合模型输入
     img_array = np.expand_dims(img_rgb, axis=0)  # 增加批次维度
     img_array = img_array / 255.0  # 归一化
 
@@ -92,7 +92,7 @@ def extract_vgg16_features(image):
     features = vgg16_model.predict(img_array)
     return features.flatten()  # 展平特征
 
-# 使用 pickle 反序列化
+# 使用pickle反序列化
 def deserialize_features(serialized_features):
     return pickle.loads(serialized_features)
 
@@ -100,9 +100,6 @@ def deserialize_features(serialized_features):
 def compute_similarity(query_features, db_features):
     # 计算余弦相似度
     return 1 - cdist(query_features.reshape(1, -1), db_features, metric='cosine')
-
-# 设置 Flask 应用
-app = Flask(__name__)
 
 @search_by_vgg_route.route('/searchbyvgg', methods=['POST'])
 def search_by_vgg():

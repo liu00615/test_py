@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像检索</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .result, .original-image {
+            margin-top: 30px;
+        }
+
+        .original-image {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .original-image h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #4CAF50;
+        }
+
+        #uploaded-image img {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .result {
+            background-color: #ffffff;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .result h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #4CAF50;
+        }
+
+        .result img {
+            max-width: 200px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>图像检索系统</h1>
+
+        <!-- 选择搜索方式和上传图片 -->
+        <div class="form-group">
+            <label for="search-method">选择搜索方式:</label>
+            <select id="search-method">
+                <option value="searchbycolor">颜色检索</option>
+                <option value="searchbyedge">边缘检索</option>
+                <option value="searchbytexture">纹理检索</option>
+                <option value="searchbysift">SIFT检索</option>
+                <option value="searchbyvgg_keras">VGG16检索</option>
+                <option value="searchbyhash">哈希检索</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="file-upload">上传查询图片:</label>
+            <input type="file" id="file-upload" name="file" accept="image/*" onchange="previewImage()">
+        </div>
+
+        <button class="btn" onclick="submitImage()">开始检索</button>
+
+        <!-- 显示上传的原始图片 -->
+        <div class="original-image" id="uploaded-image">
+            <h2>原始查询图像</h2>
+        </div>
+
+        <!-- 检索结果展示区域 -->
+        <div class="result" id="result">
+            <h2>检索结果</h2>
+        </div>
+    </div>
+
+    <script>
+        // 展示选择的原始图片
+        function previewImage() {
+            var fileInput = document.getElementById("file-upload");
+            var file = fileInput.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var imgElement = document.createElement("img");
+                    imgElement.src = e.target.result;
+                    imgElement.alt = "查询图片";
+
+                    var imageContainer = document.getElementById("uploaded-image");
+                    imageContainer.innerHTML = "<h2>原始查询图像</h2>"; // 清空之前的内容并添加标题
+                    imageContainer.appendChild(imgElement);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 提交图片到后端
+        function submitImage() {
+            var searchMethod = document.getElementById("search-method").value;
+            var fileInput = document.getElementById("file-upload");
+            var file = fileInput.files[0];
+
+            if (!file) {
+                alert("请先选择一张图片");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("file", file);
+
+            // 发送图片到指定的API
+            fetch(`http://127.0.0.1:5000/${searchMethod}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error("请求失败:", error);
+                alert("请求失败，请检查后端是否运行");
+            });
+        }
+
+        // 展示结果
+        function displayResults(data) {
+            var resultContainer = document.getElementById("result");
+            resultContainer.innerHTML = "<h2>检索结果</h2>";  // 清空之前的结果
+
+            if (data && Array.isArray(data.results) && data.results.length > 0) {
+                data.results.forEach(item => {
+                    var img = document.createElement("img");
+                    var imgPath = `../data/256_ObjectCategories/${item.image}`;
+                    img.src = imgPath;
+                    img.alt = item.image;
+                    img.title = `方法: ${item.method}, 相似度: ${item.similarity}`;
+
+                    var imgDiv = document.createElement("div");
+                    imgDiv.classList.add("img-item");
+                    imgDiv.appendChild(img);
+
+                    resultContainer.appendChild(imgDiv);
+                });
+            } else {
+                resultContainer.innerHTML += "<p>没有找到相关结果。</p>";
+            }
+        }
+    </script>
+</body>
+</html>

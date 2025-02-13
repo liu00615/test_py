@@ -9,6 +9,10 @@ from keras.src.applications.vgg16 import VGG16
 from tensorflow.keras import Model
 from tensorflow.keras import layers
 
+# 创建 Flask 蓝图
+search_by_vgg_keras_route = Blueprint('searchbyvggkeras', __name__)
+
+
 # 数据库连接配置
 db_config = {
     "host": "localhost",
@@ -22,7 +26,7 @@ db_config = {
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 加载预训练的 VGG16 模型
+# 加载预训练的VGG16模型
 def build_vgg16(input_shape=(224, 224, 3)):
     """
     加载 VGG16 模型，去掉顶层全连接层，用于特征提取。
@@ -38,9 +42,7 @@ vgg16_model = build_vgg16()
 
 # 提取图像的特征
 def extract_vgg16_features(img):
-    """
-    提取传入图像的 VGG16 特征
-    """
+    # 提取传入图像的 VGG16 特征
     img = img.resize((224, 224))  # 调整为模型输入大小
     img_array = np.array(img)  # 转换为数组
     img_array = np.expand_dims(img_array, axis=0)  # 增加批次维度
@@ -50,16 +52,13 @@ def extract_vgg16_features(img):
     features = vgg16_model.predict(img_array)
     return features.flatten()  # 展平特征
 
-# 创建 Flask 蓝图
-search_by_vgg_keras_route = Blueprint('searchbyvggkeras', __name__)
-
 # 搜索接口
 @search_by_vgg_keras_route.route('/searchbyvggkeras', methods=['POST'])
 def search_by_vgg_keras():
     # 获取上传的图像
     file = request.files['file']
 
-    # 将图像转换为 PIL 图像对象
+    # 将图像转换为PIL图像对象
     img = Image.open(io.BytesIO(file.read()))
 
     # 提取查询图像的特征
@@ -86,7 +85,7 @@ def search_by_vgg_keras():
         # 计算相似度
         similarity = cosine_similarity(query_features, vgg_features)
 
-        # 将 similarity 转换为 Python 原生的 float 类型
+        # 将similarity转换为Python float
         similarity = float(similarity)
 
         results.append({

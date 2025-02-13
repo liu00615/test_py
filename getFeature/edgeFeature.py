@@ -1,8 +1,8 @@
-import os
-import cv2
-import numpy as np
-import mysql.connector
 import json
+import os
+
+import cv2
+import mysql.connector
 
 # 配置数据库连接
 db_config = {
@@ -20,17 +20,17 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 确保数据库表存在（使用 MEDIUMTEXT 存储 HOG 特征）
+# 新建数据表 使用MEDIUMTEXT存储HOG特征
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS edge (
         id INT AUTO_INCREMENT PRIMARY KEY,
         image_path VARCHAR(255) NOT NULL,
         hu_moments TEXT NOT NULL,
-        hog_features MEDIUMTEXT NOT NULL  # 允许更大的存储空间
+        hog_features MEDIUMTEXT NOT NULL  # 可以存放较长的数据
     )
 """)
 
-# **清空 edge 表**
+# 清空edge表
 cursor.execute("DELETE FROM edge;")
 cursor.execute("ALTER TABLE edge AUTO_INCREMENT = 1;")
 conn.commit()
@@ -50,7 +50,7 @@ def extract_hu_moments(image_path):
     return hu_moments.flatten()
 
 
-# 方向梯度直方图（HOG）特征提取（减少特征维度）
+# 方向梯度直方图特征提取（HOG）
 def extract_hog_features(image_path):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
@@ -63,7 +63,7 @@ def extract_hog_features(image_path):
     if hog_features is not None:
         hog_features = hog_features.flatten()
 
-        # 降维（只取前 500 维）
+        # 降维（只取前500维）
         if len(hog_features) > 500:
             hog_features = hog_features[:500]
 
@@ -81,16 +81,16 @@ for root, _, files in os.walk(base_folder):
             if hu_moments is None:
                 continue
 
-            # 提取 HOG 特征
+            # 提取HOG特征
             hog_features = extract_hog_features(image_path)
             if hog_features is None:
                 continue
 
-            # 转换为 JSON 存储
+            # 转换为JSON存储
             hu_moments_json = json.dumps(hu_moments.tolist())
             hog_features_json = json.dumps(hog_features.tolist())
 
-            # 存储图像的路径、Hu Moments 和 HOG 特征
+            # 存储图像的路径、Hu Moments和HOG特征
             relative_path = os.path.relpath(image_path, base_folder)
             cursor.execute("INSERT INTO edge (image_path, hu_moments, hog_features) VALUES (%s, %s, %s)",
                            (relative_path, hu_moments_json, hog_features_json))

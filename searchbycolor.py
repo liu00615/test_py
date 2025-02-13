@@ -1,8 +1,8 @@
-import os
-import cv2
-import numpy as np
-import mysql.connector
 import json
+
+import cv2
+import mysql.connector
+import numpy as np
 from flask import Blueprint, request, jsonify
 
 # 配置数据库连接
@@ -14,10 +14,10 @@ db_config = {
     "connection_timeout": 300
 }
 
-# 创建 Flask 蓝图
+# 创建Flask蓝图
 search_by_color_route = Blueprint('searchbycolor', __name__)
 
-# 提取 HSV 中心矩特征
+# 提取HSV中心矩特征
 def extract_hsv_moments(image):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     v_channel = hsv_image[:, :, 2]  # 亮度通道
@@ -30,13 +30,13 @@ def extract_color_histogram(image):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     hist = cv2.calcHist([hsv_image], [0, 1, 2], None, [6, 6, 6], [0, 180, 0, 256, 0, 256])
     hist = cv2.normalize(hist, hist).flatten()
-    return hist[:48]  # 取前 48 维
+    return hist[:48]  # 取前48维
 
 # 计算欧几里得距离
 def euclidean_distance(vec1, vec2):
     return np.linalg.norm(np.array(vec1) - np.array(vec2))
 
-# 处理 /searchbycolor 请求
+# /searchbycolor请求
 @search_by_color_route.route('/searchbycolor', methods=['POST'])
 def search_by_color():
     if 'file' not in request.files:
@@ -75,7 +75,7 @@ def search_by_color():
         hsv_distance = euclidean_distance(query_hsv_moments, db_hsv_moments)
         color_hist_distance = euclidean_distance(query_color_histogram, db_color_histogram)
 
-        # 计算相似度 (1 / (1 + 距离))，确保值越大越相似
+        # 计算相似度 (1 / (1 + 距离))，值越大越相似
         hsv_similarity = float(1 / (1 + hsv_distance))
         color_hist_similarity = float(1 / (1 + color_hist_distance))
 
@@ -83,7 +83,7 @@ def search_by_color():
         hsv_results.append({"image": record["image_path"], "similarity": hsv_similarity})
         color_hist_results.append({"image": record["image_path"], "similarity": color_hist_similarity})
 
-    # 按相似度排序并取前 5 个
+    # 按相似度排序并取前5个
     hsv_results = sorted(hsv_results, key=lambda x: x["similarity"], reverse=True)[:5]
     color_hist_results = sorted(color_hist_results, key=lambda x: x["similarity"], reverse=True)[:5]
 
