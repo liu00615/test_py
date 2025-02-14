@@ -27,9 +27,7 @@ cursor = conn.cursor()
 
 # 加载预训练的VGG16模型
 def build_vgg16(input_shape=(224, 224, 3)):
-    """
-    加载 VGG16 模型，去掉顶层全连接层，用于特征提取。
-    """
+    # 加载 VGG16 模型，去掉顶层全连接层，用于特征提取。
     base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     # 提取卷积层的输出作为特征
     x = layers.GlobalAveragePooling2D()(base_model.output)
