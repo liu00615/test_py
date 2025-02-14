@@ -1,5 +1,4 @@
 import pickle  # 使用 pickle 序列化 SIFT 特征
-
 import cv2
 import mysql.connector
 import numpy as np
@@ -72,14 +71,13 @@ def search_by_sift():
     similarities.sort(key=lambda x: x[2], reverse=True)
     top_5_results = similarities[:5]
 
-    # 准备返回的结果
-    results = []
-    for img_id, img_path, similarity in top_5_results:
-        results.append({
-            "method": "SIFT",
-            "image": img_path,
-            "similarity": float(similarity)  # 转换为Python float
-        })
+    # 准备返回的结果，格式符合你要求的结构
+    results = {
+        "SIFT": [
+            {"image": img_path, "similarity": float(similarity)}
+            for _, img_path, similarity in top_5_results
+        ]
+    }
 
     # 返回JSON格式的结果
     return jsonify(results)

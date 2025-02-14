@@ -64,31 +64,41 @@ def search_by_edge():
     cursor.execute("SELECT id, image_path, hu_moments, hog_features FROM edge")
     rows = cursor.fetchall()
 
-    results = []
+    hu_results = []  # 存储基于 Hu 不变矩的搜索结果
+    hog_results = []  # 存储基于 HOG 特征的搜索结果
 
     for row in rows:
         db_id, image_path, hu_json, hog_json = row
         db_hu_moments = np.array(json.loads(hu_json))
         db_hog_features = np.array(json.loads(hog_json))
 
-        # 计算Hu不变矩和HOG特征的相似度
+        # 计算Hu不变矩的相似度
         hu_similarity = compute_similarity(query_hu_moments, db_hu_moments)
+
+        # 计算HOG特征的相似度
         hog_similarity = compute_similarity(query_hog_features, db_hog_features)
 
-        # 合并Hu不变矩和HOG相似度，计算整体准确度，此取平均
-        accuracy = (hu_similarity + hog_similarity) / 2 * 100
-
-        # 将结果添加到返回列表
-        results.append({
-            "method": "Edge Features",  # 计算方法
-            "image_path": image_path,  # 图片路径
-            "hu_similarity": hu_similarity,  # Hu 相似度
-            "hog_similarity": hog_similarity,  # HOG 相似度
-            "accuracy": accuracy  # 准确率
+        # Hu不变矩结果
+        hu_results.append({
+            "image_path": image_path,
+            "similarity": hu_similarity
         })
 
-    # 按照准确率排序，返回前五个最相似的结果
-    results = sorted(results, key=lambda x: x['accuracy'], reverse=True)
+        # HOG特征结果
+        hog_results.append({
+            "image_path": image_path,
+            "similarity": hog_similarity
+        })
+
+    # 按照相似度排序，返回前五个最相似的结果
+    hu_results = sorted(hu_results, key=lambda x: x['similarity'], reverse=True)[:5]
+    hog_results = sorted(hog_results, key=lambda x: x['similarity'], reverse=True)[:5]
+
+    # 构造最终返回的结果
+    response = {
+        "Hu Moments": [{"image": result['image_path'], "similarity": result['similarity']} for result in hu_results],
+        "HOG Features": [{"image": result['image_path'], "similarity": result['similarity']} for result in hog_results]
+    }
 
     # 返回最相似的五个图像及其相似度
-    return jsonify(results[:5])
+    return jsonify(response)

@@ -58,7 +58,7 @@
 
         #uploaded-image img {
             max-width: 100%;
-            max-height: 300px;
+            max-height: 250px;
             margin-top: 10px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -77,11 +77,35 @@
             color: #4CAF50;
         }
 
-        .result img {
-            max-width: 200px;
+        .result .method-group {
+            margin-top: 20px;
+        }
+
+        .method-group h3 {
+            color: #333;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        /* 调整图片的大小，使其统一 */
+        .image-row img {
+            width: 150px;  /* 设置统一的宽度 */
+            height: 150px; /* 设置统一的高度 */
+            object-fit: cover; /* 确保图片内容不会被拉伸或压缩 */
             margin: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
+        }
+
+        .similarity {
+            text-align: center;
+            color: #555;
+            margin-top: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -89,7 +113,7 @@
     <div class="container">
         <h1>图像检索系统</h1>
 
-        <!-- 选择搜索方式和上传图片 -->
+        <!-- 表单选择搜索方式和上传图片 -->
         <div class="form-group">
             <label for="search-method">选择搜索方式:</label>
             <select id="search-method">
@@ -97,7 +121,7 @@
                 <option value="searchbyedge">边缘检索</option>
                 <option value="searchbytexture">纹理检索</option>
                 <option value="searchbysift">SIFT检索</option>
-                <option value="searchbyvgg_keras">VGG16检索</option>
+                <option value="searchbyvggkeras">VGG16检索</option>
                 <option value="searchbyhash">哈希检索</option>
             </select>
         </div>
@@ -121,7 +145,7 @@
     </div>
 
     <script>
-        // 展示选择的原始图片
+        // 展示选择的图片
         function previewImage() {
             var fileInput = document.getElementById("file-upload");
             var file = fileInput.files[0];
@@ -137,11 +161,11 @@
                     imageContainer.innerHTML = "<h2>原始查询图像</h2>"; // 清空之前的内容并添加标题
                     imageContainer.appendChild(imgElement);
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file);  // 读取文件内容并展示
             }
         }
 
-        // 提交图片到后端
+        // 提交图片到后端进行检索
         function submitImage() {
             var searchMethod = document.getElementById("search-method").value;
             var fileInput = document.getElementById("file-upload");
@@ -170,27 +194,47 @@
             });
         }
 
-        // 展示结果
+        // 展示返回的检索结果
         function displayResults(data) {
             var resultContainer = document.getElementById("result");
-            resultContainer.innerHTML = "<h2>检索结果</h2>";  // 清空之前的结果
+            resultContainer.innerHTML = "<h2>检索结果</h2>";  // 清空之前的结果并添加标题
 
-            if (data && Array.isArray(data.results) && data.results.length > 0) {
-                data.results.forEach(item => {
-                    var img = document.createElement("img");
-                    var imgPath = `../data/256_ObjectCategories/${item.image}`;
-                    img.src = imgPath;
-                    img.alt = item.image;
-                    img.title = `方法: ${item.method}, 相似度: ${item.similarity}`;
+            // 遍历每种方法的结果
+            for (let method in data) {
+                if (data[method].length > 0) {
+                    var methodGroup = document.createElement("div");
+                    methodGroup.classList.add("method-group");
 
-                    var imgDiv = document.createElement("div");
-                    imgDiv.classList.add("img-item");
-                    imgDiv.appendChild(img);
+                    var methodTitle = document.createElement("h3");
+                    methodTitle.innerText = `${method} 方法`;
+                    methodGroup.appendChild(methodTitle);
 
-                    resultContainer.appendChild(imgDiv);
-                });
-            } else {
-                resultContainer.innerHTML += "<p>没有找到相关结果。</p>";
+                    var imageRow = document.createElement("div");
+                    imageRow.classList.add("image-row");
+
+                    data[method].forEach(item => {
+                        var img = document.createElement("img");
+                        var imgPath = `../data/256_ObjectCategories/${item.image}`;
+                        img.src = imgPath;
+                        img.alt = item.image;
+                        img.title = `相似度: ${item.similarity}`;
+
+                        var similarityText = document.createElement("div");
+                        similarityText.classList.add("similarity");
+                        similarityText.innerText = `相似度: ${item.similarity.toFixed(4)}`;
+
+                        // 包裹图片和相似度文本
+                        var imgContainer = document.createElement("div");
+                        imgContainer.classList.add("image-container");
+                        imgContainer.appendChild(img);
+                        imgContainer.appendChild(similarityText);
+
+                        imageRow.appendChild(imgContainer);
+                    });
+
+                    methodGroup.appendChild(imageRow);
+                    resultContainer.appendChild(methodGroup);
+                }
             }
         }
     </script>

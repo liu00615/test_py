@@ -12,7 +12,6 @@ from tensorflow.keras import layers
 # 创建 Flask 蓝图
 search_by_vgg_keras_route = Blueprint('searchbyvggkeras', __name__)
 
-
 # 数据库连接配置
 db_config = {
     "host": "localhost",
@@ -64,10 +63,6 @@ def search_by_vgg_keras():
     # 提取查询图像的特征
     query_features = extract_vgg16_features(img)
 
-    # 连接数据库
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
-
     # 查找数据库中最相似的图像
     cursor.execute("SELECT id, image_path, vgg_features FROM vgg_keras")
     rows = cursor.fetchall()
@@ -89,17 +84,17 @@ def search_by_vgg_keras():
         similarity = float(similarity)
 
         results.append({
-            'image_path': image_path,
+            'image': image_path,
             'similarity': similarity
         })
 
     # 排序结果，按相似度从高到低
     results = sorted(results, key=lambda x: x['similarity'], reverse=True)
 
-    # 关闭数据库连接
-    cursor.close()
-    conn.close()
-
-    # 返回前5个最相似的图像
-    return jsonify(results[:5])
-
+    # 返回前5个最相似的图像，并以符合要求的格式返回
+    return jsonify({
+        "VGG16": [
+            {"image": result['image'], "similarity": result['similarity']}
+            for result in results[:5]
+        ]
+    })

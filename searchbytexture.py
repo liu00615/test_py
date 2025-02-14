@@ -73,7 +73,7 @@ def run_search(query_image):
     rows = get_database_features()
 
     # 保存结果
-    results = {"glcm": [], "lbp": []}
+    results = {"GLCM": [], "LBP": []}
 
     # 计算与数据库中每张图像的相似度
     for row in rows:
@@ -83,20 +83,20 @@ def run_search(query_image):
 
         # 计算GLCM特征的相似度
         glcm_similarity = compute_similarity(query_glcm_features, glcm_features)
-        results["glcm"].append({"image_path": image_path, "similarity": glcm_similarity})
+        results["GLCM"].append({"image": image_path, "similarity": glcm_similarity})
 
         # 计算LBP特征的相似度
         lbp_similarity = compute_similarity(query_lbp_features, lbp_features)
-        results["lbp"].append({"image_path": image_path, "similarity": lbp_similarity})
+        results["LBP"].append({"image": image_path, "similarity": lbp_similarity})
 
     # 按照相似度排序，取前5个最相似的图像
-    results["glcm"] = sorted(results["glcm"], key=lambda x: x["similarity"])[:5]
-    results["lbp"] = sorted(results["lbp"], key=lambda x: x["similarity"])[:5]
+    results["GLCM"] = sorted(results["GLCM"], key=lambda x: x["similarity"])[:5]
+    results["LBP"] = sorted(results["LBP"], key=lambda x: x["similarity"])[:5]
 
     # 返回结果
     response = {
-        "glcm": results["glcm"],
-        "lbp": results["lbp"]
+        "GLCM": results["GLCM"],
+        "LBP": results["LBP"]
     }
 
     return response
