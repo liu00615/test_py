@@ -17,18 +17,6 @@ db_config = {
     "connection_timeout": 300
 }
 
-# 连接数据库
-conn = mysql.connector.connect(**db_config)
-cursor = conn.cursor()
-
-# 加载哈希特征的数据库表
-def load_hash_features():
-    cursor.execute("SELECT id, image_path, aHash, dHash, pHash FROM hash")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return rows
-
 # 哈希方法的计算函数
 def average_hash(img, hash_size=8):
     img = img.convert('L')
@@ -69,12 +57,17 @@ def hamming_distance(hash1, hash2):
 
 # 计算相似度
 def calculate_similarity(distance, max_distance):
-    # 使用归一化公式计算相似度
     return 1 - (distance / max_distance)
 
+# 加载哈希特征的数据库表
+def load_hash_features(cursor):
+    cursor.execute("SELECT id, image_path, aHash, dHash, pHash FROM hash")
+    rows = cursor.fetchall()
+    return rows
+
 # 根据查询图像返回最相似的图像列表
-def search_similar_images(query_hash, method):
-    rows = load_hash_features()
+def search_similar_images(query_hash, method, cursor):
+    rows = load_hash_features(cursor)
     results = []
 
     for row in rows:
@@ -115,16 +108,24 @@ def search_by_hash():
     d_hash_query = difference_hash(img)
     p_hash_query = perceptual_hash(img)
 
+    # 连接数据库
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+
     # 获取搜索结果
-    a_hash_results = search_similar_images(a_hash_query, 'aHash')
-    d_hash_results = search_similar_images(d_hash_query, 'dHash')
-    p_hash_results = search_similar_images(p_hash_query, 'pHash')
+    a_hash_results = search_similar_images(a_hash_query, 'aHash', cursor)
+    d_hash_results = search_similar_images(d_hash_query, 'dHash', cursor)
+    p_hash_results = search_similar_images(p_hash_query, 'pHash', cursor)
+
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
 
     # 构造返回结果
     response = {
-        "aHash": [{"method": "aHash", "image": result[1], "similarity": result[2]} for result in a_hash_results],
-        "dHash": [{"method": "dHash", "image": result[1], "similarity": result[2]} for result in d_hash_results],
-        "pHash": [{"method": "pHash", "image": result[1], "similarity": result[2]} for result in p_hash_results]
+        "aHash": [{"image": result[1], "similarity": result[2]} for result in a_hash_results],
+        "dHash": [{"image": result[1], "similarity": result[2]} for result in d_hash_results],
+        "pHash": [{"image": result[1], "similarity": result[2]} for result in p_hash_results]
     }
 
     return jsonify(response)
