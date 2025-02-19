@@ -1,21 +1,33 @@
 body {
     font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f4f4f9;
+    padding: 0;
+    margin: 0;
+    background-image: url('media/background.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 1400px;  /* 增大容器宽度 */
+    min-height: 800px;  /* 增大容器高度 */
+    margin: 30px auto; /* 调整顶部空隙 */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* 背景稍微透明 */
+    border-radius: 8px;
 }
 
 h1 {
     text-align: center;
     color: #333;
+    background-color: teal;
+    background-image: url('media/logo.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding: 20px 0;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 label {
@@ -24,16 +36,19 @@ label {
 
 select, input[type="file"] {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
 .btn {
-    padding: 10px 15px;
+    padding: 12px 18px;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .btn:hover {
@@ -47,9 +62,10 @@ select, input[type="file"] {
 
 .original-image {
     background-color: #f0f0f0;
-    padding: 15px;
+    padding: 20px;
     border: 2px solid #ddd;
     border-radius: 8px;
+    text-align: left;
 }
 
 .original-image h2 {
@@ -68,7 +84,7 @@ select, input[type="file"] {
 
 .result {
     background-color: #ffffff;
-    padding: 15px;
+    padding: 20px;
     border: 2px solid #ddd;
     border-radius: 8px;
 }
@@ -94,8 +110,17 @@ select, input[type="file"] {
 }
 
 .image-row img {
-    max-width: 150px; /* 更小的图片 */
+    width: 150px;  /* 固定宽度 */
+    height: 150px;  /* 固定高度 */
+    object-fit: cover;  /* 保持图片比例，裁切图片 */
     margin: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
+}
+
+.image-info {
+    text-align: center;  /* 居中显示 */
+    margin-top: 5px;      /* 与图片保持一定间距 */
+    font-size: 0.9em;     /* 小字体显示相似度 */
+    color: #333;
 }

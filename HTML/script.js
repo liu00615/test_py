@@ -66,17 +66,17 @@ function submitImage() {
     errorMessage.innerHTML = ""; // 清空错误信息
 
     if (!searchMethod) {
-        errorMessage.innerHTML = "请先选择搜索方式";
+        alert("请先选择搜索方式");
         return;
     }
 
     if (!featureMethod) {
-        errorMessage.innerHTML = "请先选择特征方法";
+        alert("请先选择特征方法");
         return;
     }
 
     if (!file) {
-        errorMessage.innerHTML = "请先选择查询图片";
+        alert("请先选择查询图片");
         return;
     }
 
@@ -124,7 +124,20 @@ function displayResults(data, featureMethod) {
                 img.alt = item.image;
                 img.title = `相似度: ${item.similarity}`;
 
-                imageRow.appendChild(img);
+                // 格式化相似度为百分比形式，保留五位小数
+                var similarityPercent = (item.similarity * 100).toFixed(3) + '%';
+
+                // 创建相似度显示元素
+                var imageInfo = document.createElement("div");
+                imageInfo.classList.add("image-info");
+                imageInfo.innerText = `相似度: ${similarityPercent}`;
+
+                // 将图片和相似度显示组合在一起
+                var imageContainer = document.createElement("div");
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(imageInfo);
+
+                imageRow.appendChild(imageContainer);
             });
 
             methodGroup.appendChild(imageRow);
