@@ -3,25 +3,31 @@ body {
     padding: 20px;
     background-color: #f4f4f9;
 }
+
 .container {
     max-width: 900px;
     margin: 0 auto;
 }
+
 h1 {
     text-align: center;
     color: #333;
 }
+
 .form-group {
     margin-bottom: 15px;
 }
+
 label {
     font-weight: bold;
 }
+
 select, input[type="file"] {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
 }
+
 .btn {
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -29,11 +35,14 @@ select, input[type="file"] {
     border: none;
     cursor: pointer;
 }
+
 .btn:hover {
     background-color: #45a049;
 }
-.result, .original-image {
-    margin-top: 30px;
+
+.error-message {
+    color: red;
+    margin-top: 15px;
 }
 
 .original-image {
@@ -85,17 +94,8 @@ select, input[type="file"] {
 }
 
 .image-row img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover; /* 放缩 */
+    max-width: 150px; /* 更小的图片 */
     margin: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
-}
-
-.similarity {
-    text-align: center;
-    color: #555;
-    margin-top: 10px;
-    font-size: 14px;
 }

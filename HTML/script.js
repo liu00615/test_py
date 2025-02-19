@@ -1,3 +1,39 @@
+const featureMethods = {
+    "searchbycolor": ["Color_Histogram", "HSV_Moments"],
+    "searchbyedge": ["HOG_Features", "Hu_Moments"],
+    "searchbytexture": ["GLCM", "LBP"],
+    "searchbysift": ["SIFT"],
+    "searchbyvggkeras": ["VGG16"],
+    "searchbyhash": ["aHash", "dHash", "pHash"]
+};
+
+// 动态更新特征方法选择框
+document.getElementById("search-method").addEventListener("change", function() {
+    var searchMethod = this.value;
+    var featureSelect = document.getElementById("feature-method");
+
+    // 清空并启用特征方法选择框
+    featureSelect.innerHTML = '<option value="" disabled selected>请选择特征方法</option>';
+    if (searchMethod && featureMethods[searchMethod]) {
+        featureMethods[searchMethod].forEach(function(method) {
+            var option = document.createElement("option");
+            option.value = method;
+            option.textContent = method;
+            featureSelect.appendChild(option);
+        });
+
+        featureSelect.disabled = false; // 启用特征方法选择框
+    } else {
+        featureSelect.disabled = true; // 禁用特征方法选择框
+    }
+});
+
+// 页面加载时不默认选择任何选项
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("search-method").selectedIndex = -1; // 取消默认选择
+    document.getElementById("feature-method").disabled = true; // 禁用特征方法选择框
+});
+
 // 展示选择的图片
 function previewImage() {
     var fileInput = document.getElementById("file-upload");
@@ -21,11 +57,26 @@ function previewImage() {
 // 提交图片到后端进行检索
 function submitImage() {
     var searchMethod = document.getElementById("search-method").value;
+    var featureMethod = document.getElementById("feature-method").value;
     var fileInput = document.getElementById("file-upload");
     var file = fileInput.files[0];
 
+    // 提示用户选择搜索方法和特征方法
+    var errorMessage = document.getElementById("error-message");
+    errorMessage.innerHTML = ""; // 清空错误信息
+
+    if (!searchMethod) {
+        errorMessage.innerHTML = "请先选择搜索方式";
+        return;
+    }
+
+    if (!featureMethod) {
+        errorMessage.innerHTML = "请先选择特征方法";
+        return;
+    }
+
     if (!file) {
-        alert("请先选择一张图片");
+        errorMessage.innerHTML = "请先选择查询图片";
         return;
     }
 
@@ -39,7 +90,7 @@ function submitImage() {
     })
     .then(response => response.json())
     .then(data => {
-        displayResults(data);
+        displayResults(data, featureMethod); // 传入特征方法，过滤结果
     })
     .catch(error => {
         console.error("请求失败:", error);
@@ -48,13 +99,14 @@ function submitImage() {
 }
 
 // 展示返回的检索结果
-function displayResults(data) {
+function displayResults(data, featureMethod) {
     var resultContainer = document.getElementById("result");
     resultContainer.innerHTML = "<h2>检索结果</h2>";  // 清空之前的结果并添加标题
 
     // 遍历每种方法的结果
     for (let method in data) {
-        if (data[method].length > 0) {
+        // 只有用户选择的特征方法对应的结果会被展示
+        if (method === featureMethod && data[method].length > 0) {
             var methodGroup = document.createElement("div");
             methodGroup.classList.add("method-group");
 
@@ -72,17 +124,7 @@ function displayResults(data) {
                 img.alt = item.image;
                 img.title = `相似度: ${item.similarity}`;
 
-                var similarityText = document.createElement("div");
-                similarityText.classList.add("similarity");
-                similarityText.innerText = `相似度: ${item.similarity.toFixed(4)}`;
-
-                // 包裹图片和相似度文本
-                var imgContainer = document.createElement("div");
-                imgContainer.classList.add("image-container");
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(similarityText);
-
-                imageRow.appendChild(imgContainer);
+                imageRow.appendChild(img);
             });
 
             methodGroup.appendChild(imageRow);

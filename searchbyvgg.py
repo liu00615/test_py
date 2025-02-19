@@ -136,7 +136,7 @@ def search_by_vgg():
         top_5_images = [{"image_path": image_paths[i], "similarity": float(similarities[0][i])}
                         for i in most_similar_idx[:5]]
 
-        return jsonify({"results": top_5_images})
+        return jsonify({"VGG_my": top_5_images})
 
     except Exception as e:
         print(f"Error occurred: {e}")

@@ -96,8 +96,8 @@ def search_by_edge():
 
     # 构造最终返回的结果
     response = {
-        "Hu Moments": [{"image": result['image_path'], "similarity": result['similarity']} for result in hu_results],
-        "HOG Features": [{"image": result['image_path'], "similarity": result['similarity']} for result in hog_results]
+        "Hu_Moments": [{"image": result['image_path'], "similarity": result['similarity']} for result in hu_results],
+        "HOG_Features": [{"image": result['image_path'], "similarity": result['similarity']} for result in hog_results]
     }
 
     # 返回最相似的五个图像及其相似度
