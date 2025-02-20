@@ -71,7 +71,6 @@ def search_by_sift():
     similarities.sort(key=lambda x: x[2], reverse=True)
     top_5_results = similarities[:5]
 
-    # 准备返回的结果，格式符合你要求的结构
     results = {
         "SIFT": [
             {"image": img_path, "similarity": float(similarity)}
