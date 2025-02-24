@@ -1,6 +1,5 @@
 import os
 import pickle
-
 import cv2
 import mysql.connector
 
@@ -10,7 +9,7 @@ db_config = {
     "user": "root",
     "password": "123456",
     "database": "graduation",
-    "connection_timeout": 300
+    "connection_timeout": 3000,  # sift特征大一点，提取后插入数据库报错数据库断联，所以这里改大一点
 }
 
 # 目标数据集文件夹
@@ -39,7 +38,6 @@ print("数据库表 sift 已清空，准备插入新数据...")
 # 初始化SIFT算法
 sift = cv2.SIFT_create()
 
-
 # 提取SIFT特征的函数
 def extract_sift_features(image):
     # 将图像转换为灰度图像
@@ -50,6 +48,10 @@ def extract_sift_features(image):
 
     return descriptors
 
+# 每次提交的批量大小
+# 一次性提取全部再插入数据库会导致数据库断开报错
+batch_size = 100
+count = 0
 
 # 遍历所有子文件夹
 for root, _, files in os.walk(base_folder):
@@ -81,11 +83,16 @@ for root, _, files in os.walk(base_folder):
                 VALUES (%s, %s)
             """, (relative_path, sift_features_pickle))
 
-            print(f"图像 {image_path} 特征提取成功！")
+            count += 1
+            if count % batch_size == 0:
+                conn.commit()  # 每100条提交一次
+                print(f"已提交 {count} 条数据...")
+
+# 最后提交剩余的数据
+conn.commit()
 
 # 提交更改并关闭连接
-conn.commit()
 cursor.close()
 conn.close()
 
-print("所有图像的 SIFT 特征已提取并存入数据库！")
+print(f"所有图像的SIFT特征已提取并存入数据库，共 {count} 条数据。")

@@ -1,6 +1,5 @@
 import json
 import os
-
 import cv2
 import mysql.connector
 import numpy as np
@@ -23,7 +22,7 @@ base_folder = "../data/256_ObjectCategories"
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# 创建表（如果不存在）
+# 创建表
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS texture (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,8 +37,11 @@ cursor.execute("DELETE FROM texture;")
 cursor.execute("ALTER TABLE texture AUTO_INCREMENT = 1;")
 conn.commit()
 
-print("数据库表 texture 已清空，准备插入新数据...")
+print("数据库表texture已清空，准备插入新数据...")
 
+# 每次提交的批量大小
+batch_size = 100
+count = 0
 
 # 提取 GLCM 特征
 def extract_glcm_features(image):
@@ -89,9 +91,16 @@ for root, _, files in os.walk(base_folder):
                            (os.path.relpath(image_path, base_folder), json.dumps(glcm_features),
                             json.dumps(lbp_features)))
 
-# 提交更改
+            count += 1
+            if count % batch_size == 0:
+                conn.commit()  # 每100条提交一次
+                print(f"已提交 {count} 条数据...")
+
+# 最后提交剩余的数据
 conn.commit()
+
+# 提交更改并关闭连接
 cursor.close()
 conn.close()
 
-print("所有图像的 GLCM 和 LBP 特征已提取并存入数据库！")
+print(f"所有图像的 GLCM 和 LBP 特征已提取并存入数据库，共 {count} 条数据。")

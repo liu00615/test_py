@@ -1,6 +1,5 @@
 import os
 import pickle
-
 import mysql.connector
 import numpy as np
 from keras.api.preprocessing import image
@@ -39,6 +38,10 @@ cursor.execute("ALTER TABLE vgg_keras AUTO_INCREMENT = 1;")
 conn.commit()
 
 print("数据库表 vgg_keras 已清空，准备插入新数据...")
+
+# 每次提交的批量大小
+batch_size = 100
+count = 0
 
 # 加载预训练的VGG16模型
 def build_vgg16(input_shape=(224, 224, 3)):
@@ -83,9 +86,16 @@ for root, _, files in os.walk(base_folder):
             cursor.execute("INSERT INTO vgg_keras (image_path, vgg_features) VALUES (%s, %s)",
                            (relative_path, vgg16_features_serialized))
 
-# 提交更改并关闭连接
+            count += 1
+            if count % batch_size == 0:
+                conn.commit()  # 每100条提交一次
+                print(f"已提交 {count} 条数据...")
+
+# 最后提交剩余的数据
 conn.commit()
+
+# 提交更改并关闭连接
 cursor.close()
 conn.close()
 
-print("所有图像的 VGG16 特征已提取并存入数据库！")
+print(f"所有图像的 VGG16 特征已提取并存入数据库，共 {count} 条数据。")

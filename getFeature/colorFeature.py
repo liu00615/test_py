@@ -100,4 +100,4 @@ conn.commit()
 cursor.close()
 conn.close()
 
-print("所有图像的颜色特征（HSV 中心矩和颜色直方图）已提取并存入数据库！")
+print("所有图像的颜色特征已提取并存入数据库！")
