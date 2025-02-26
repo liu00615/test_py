@@ -7,32 +7,51 @@ const featureMethods = {
     "searchbyhash": ["aHash", "dHash", "pHash"]
 };
 
-// 动态更新特征方法选择框
-document.getElementById("search-method").addEventListener("change", function() {
-    var searchMethod = this.value;
-    var featureSelect = document.getElementById("feature-method");
+// 点击搜索方式按钮时，标记为选中状态
+document.getElementById("search-buttons").addEventListener("click", function(event) {
+    if (event.target.classList.contains("method-btn")) {
+        // 移除之前选中的按钮
+        const selectedBtn = document.querySelector("#search-buttons .method-btn.selected");
+        if (selectedBtn) {
+            selectedBtn.classList.remove("selected");
+        }
 
-    // 清空并启用特征方法选择框
-    featureSelect.innerHTML = '<option value="" disabled selected>请选择特征方法</option>';
-    if (searchMethod && featureMethods[searchMethod]) {
-        featureMethods[searchMethod].forEach(function(method) {
-            var option = document.createElement("option");
-            option.value = method;
-            option.textContent = method;
-            featureSelect.appendChild(option);
-        });
+        // 标记当前按钮为选中
+        event.target.classList.add("selected");
 
-        featureSelect.disabled = false; // 启用特征方法选择框
-    } else {
-        featureSelect.disabled = true; // 禁用特征方法选择框
+        var searchMethod = event.target.getAttribute("data-method");
+        updateFeatureButtons(searchMethod);  // 更新特征方法按钮
     }
 });
 
-// 页面加载时不默认选择任何选项
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById("search-method").selectedIndex = -1; // 取消默认选择
-    document.getElementById("feature-method").disabled = true; // 禁用特征方法选择框
-});
+// 动态更新特征方法按钮
+function updateFeatureButtons(searchMethod) {
+    var featureButtonsContainer = document.getElementById("feature-buttons");
+    featureButtonsContainer.innerHTML = ""; // 清空之前的按钮
+
+    if (featureMethods[searchMethod]) {
+        featureMethods[searchMethod].forEach(function(method) {
+            var button = document.createElement("button");
+            button.classList.add("method-btn");
+            button.textContent = method;
+            button.setAttribute("data-method", method);
+            
+            // 添加点击事件标记选中
+            button.addEventListener("click", function() {
+                const selectedBtn = document.querySelector("#feature-buttons .method-btn.selected");
+                if (selectedBtn) {
+                    selectedBtn.classList.remove("selected");
+                }
+                button.classList.add("selected");
+            });
+
+            featureButtonsContainer.appendChild(button);
+        });
+        featureButtonsContainer.disabled = false; // 启用特征方法按钮组
+    } else {
+        featureButtonsContainer.disabled = true; // 禁用特征方法按钮组
+    }
+}
 
 // 展示选择的图片
 function previewImage() {
@@ -56,8 +75,8 @@ function previewImage() {
 
 // 提交图片到后端进行检索
 function submitImage() {
-    var searchMethod = document.getElementById("search-method").value;
-    var featureMethod = document.getElementById("feature-method").value;
+    var searchMethod = document.querySelector("#search-buttons .method-btn.selected")?.getAttribute("data-method");
+    var featureMethod = document.querySelector("#feature-buttons .method-btn.selected")?.getAttribute("data-method");
     var fileInput = document.getElementById("file-upload");
     var file = fileInput.files[0];
 

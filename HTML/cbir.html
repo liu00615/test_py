@@ -12,23 +12,22 @@
 
         <!-- 表单选择搜索方式和上传图片 -->
         <div class="form-group">
-            <label for="search-method">选择搜索方式:</label>
-            <select id="search-method">
-                <option value="" disabled>请选择搜索方式</option>
-                <option value="searchbycolor">颜色检索</option>
-                <option value="searchbyedge">边缘检索</option>
-                <option value="searchbytexture">纹理检索</option>
-                <option value="searchbysift">SIFT检索</option>
-                <option value="searchbyvggkeras">VGG16检索</option>
-                <option value="searchbyhash">哈希检索</option>
-            </select>
+            <label>选择搜索方式:</label>
+            <div id="search-buttons" class="button-group">
+                <button class="method-btn" data-method="searchbycolor">颜色检索</button>
+                <button class="method-btn" data-method="searchbyedge">边缘检索</button>
+                <button class="method-btn" data-method="searchbytexture">纹理检索</button>
+                <button class="method-btn" data-method="searchbysift">SIFT检索</button>
+                <button class="method-btn" data-method="searchbyvggkeras">VGG16检索</button>
+                <button class="method-btn" data-method="searchbyhash">哈希检索</button>
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="feature-method">选择特征方法:</label>
-            <select id="feature-method" disabled>
-                <option value="" disabled selected>请选择特征方法</option>
-            </select>
+            <label>选择特征方法:</label>
+            <div id="feature-buttons" class="button-group" disabled>
+                <!-- 按钮会动态添加到这里 -->
+            </div>
         </div>
 
         <div class="form-group">

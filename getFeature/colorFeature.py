@@ -37,19 +37,37 @@ conn.commit()
 
 print("数据库表 color 已清空，准备插入新数据...")
 
-
-# 提取 HSV 中心矩特征
-def extract_hsv_moments(image_path):
+# 预处理步骤：图像缩放、去噪和直方图均衡化
+def preprocess_image(image_path, target_size=(256, 256)):
     image = cv2.imread(image_path)
     if image is None:
         print(f"无法读取图像: {image_path}")
         return None
+
+    # 缩放图像到统一尺寸
+    image = cv2.resize(image, target_size)
+
+    # 去噪（高斯滤波）
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+
+    # 转换为HSV颜色空间
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # 提取 V 通道（亮度通道）
+    # 对亮度通道V进行直方图均衡化
+    hsv_image[:, :, 2] = cv2.equalizeHist(hsv_image[:, :, 2])
+
+    return hsv_image
+
+# 提取 HSV 中心矩特征
+def extract_hsv_moments(image_path):
+    hsv_image = preprocess_image(image_path)
+    if hsv_image is None:
+        return None
+
+    # 提取亮度通道V
     v_channel = hsv_image[:, :, 2]
 
-    # 计算 V 通道的矩
+    # 计算V通道的矩
     moments = cv2.moments(v_channel)
     hsv_moments = cv2.HuMoments(moments).flatten()
     return hsv_moments
@@ -57,11 +75,9 @@ def extract_hsv_moments(image_path):
 
 # 提取颜色直方图特征（48维）
 def extract_color_histogram(image_path):
-    image = cv2.imread(image_path)
-    if image is None:
-        print(f"无法读取图像: {image_path}")
+    hsv_image = preprocess_image(image_path)
+    if hsv_image is None:
         return None
-    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # 每个通道6bins，共6*6*6=216维
     hist = cv2.calcHist([hsv_image], [0, 1, 2], None, [6, 6, 6], [0, 180, 0, 256, 0, 256])
