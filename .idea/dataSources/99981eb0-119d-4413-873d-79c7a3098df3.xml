@@ -1082,7 +1082,7 @@ webserver|schema||yangan||UPDATE|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="graduation">
-      <LastIntrospectionLocalTimestamp>2025-02-20.13:21:49</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-02-26.05:54:32</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="information_schema">
@@ -1123,81 +1123,82 @@ webserver|schema||yangan||UPDATE|G</Grants>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="301" parent="289" name="edge">
+    <table id="301" parent="289" name="hash">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="302" parent="289" name="hash">
+    <table id="302" parent="289" name="sift">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="303" parent="289" name="sift">
+    <table id="303" parent="289" name="texture">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="304" parent="289" name="texture">
+    <table id="304" parent="289" name="vgg">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="305" parent="289" name="vgg">
+    <table id="305" parent="289" name="vgg_keras">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="306" parent="289" name="vgg_keras">
-      <Engine>InnoDB</Engine>
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </table>
-    <column id="307" parent="300" name="id">
-      <AutoIncrement>196</AutoIncrement>
+    <column id="306" parent="300" name="id">
+      <AutoIncrement>30607</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="308" parent="300" name="image_path">
+    <column id="307" parent="300" name="image_path">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="309" parent="300" name="hsv_moments">
+    <column id="308" parent="300" name="hsv_moments">
       <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="310" parent="300" name="color_histogram">
+    <column id="309" parent="300" name="color_histogram">
       <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <index id="311" parent="300" name="PRIMARY">
+    <index id="310" parent="300" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="312" parent="300" name="PRIMARY">
+    <key id="311" parent="300" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="313" parent="301" name="id">
-      <AutoIncrement>196</AutoIncrement>
+    <column id="312" parent="301" name="id">
+      <AutoIncrement>30606</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="314" parent="301" name="image_path">
+    <column id="313" parent="301" name="image_path">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="315" parent="301" name="hu_moments">
-      <DasType>text|0s</DasType>
+    <column id="314" parent="301" name="aHash">
+      <DasType>blob|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="316" parent="301" name="hog_features">
-      <DasType>text|0s</DasType>
+    <column id="315" parent="301" name="dHash">
+      <DasType>blob|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
+    </column>
+    <column id="316" parent="301" name="pHash">
+      <DasType>blob|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
     </column>
     <index id="317" parent="301" name="PRIMARY">
       <ColNames>id</ColNames>
@@ -1210,7 +1211,7 @@ webserver|schema||yangan||UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="319" parent="302" name="id">
-      <AutoIncrement>195</AutoIncrement>
+      <AutoIncrement>4885</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1220,49 +1221,49 @@ webserver|schema||yangan||UPDATE|G</Grants>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="321" parent="302" name="aHash">
-      <DasType>blob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="322" parent="302" name="dHash">
-      <DasType>blob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <column id="323" parent="302" name="pHash">
-      <DasType>blob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-    </column>
-    <index id="324" parent="302" name="PRIMARY">
-      <ColNames>id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="325" parent="302" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="326" parent="303" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="327" parent="303" name="image_path">
-      <DasType>varchar(255)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="328" parent="303" name="sift_features">
+    <column id="321" parent="302" name="sift_features">
       <DasType>longblob|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <index id="329" parent="303" name="PRIMARY">
+    <index id="322" parent="302" name="PRIMARY">
       <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="323" parent="302" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="324" parent="303" name="id">
+      <AutoIncrement>30606</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="325" parent="303" name="image_path">
+      <DasType>varchar(255)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="326" parent="303" name="glcm_features">
+      <DasType>text|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="327" parent="303" name="lbp_features">
+      <DasType>text|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <index id="328" parent="303" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="329" parent="303" name="image_path">
+      <ColNames>image_path</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
@@ -1271,93 +1272,57 @@ webserver|schema||yangan||UPDATE|G</Grants>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="331" parent="304" name="id">
-      <AutoIncrement>196</AutoIncrement>
+    <key id="331" parent="303" name="image_path">
+      <UnderlyingIndexName>image_path</UnderlyingIndexName>
+    </key>
+    <column id="332" parent="304" name="id">
+      <AutoIncrement>30606</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="332" parent="304" name="image_path">
+    <column id="333" parent="304" name="image_path">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="333" parent="304" name="glcm_features">
-      <DasType>text|0s</DasType>
+    <column id="334" parent="304" name="vgg_features">
+      <DasType>longblob|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-    </column>
-    <column id="334" parent="304" name="lbp_features">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
     </column>
     <index id="335" parent="304" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="336" parent="304" name="image_path">
-      <ColNames>image_path</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="337" parent="304" name="PRIMARY">
+    <key id="336" parent="304" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="338" parent="304" name="image_path">
-      <UnderlyingIndexName>image_path</UnderlyingIndexName>
-    </key>
-    <column id="339" parent="305" name="id">
-      <AutoIncrement>195</AutoIncrement>
+    <column id="337" parent="305" name="id">
+      <AutoIncrement>30606</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="340" parent="305" name="image_path">
+    <column id="338" parent="305" name="image_path">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="341" parent="305" name="vgg_features">
-      <DasType>longblob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="342" parent="305" name="PRIMARY">
-      <ColNames>id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="343" parent="305" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="344" parent="306" name="id">
-      <AutoIncrement>195</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="345" parent="306" name="image_path">
-      <DasType>varchar(255)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="346" parent="306" name="vgg_features">
+    <column id="339" parent="305" name="vgg_features">
       <DasType>blob|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <index id="347" parent="306" name="PRIMARY">
+    <index id="340" parent="305" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="348" parent="306" name="PRIMARY">
+    <key id="341" parent="305" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

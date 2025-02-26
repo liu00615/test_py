@@ -3,6 +3,8 @@ import os
 
 import cv2
 import mysql.connector
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 # 配置数据库连接
 db_config = {
@@ -21,7 +23,7 @@ conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
 # 新建数据表 使用MEDIUMTEXT存储HOG特征
-cursor.execute("""
+cursor.execute(""" 
     CREATE TABLE IF NOT EXISTS edge (
         id INT AUTO_INCREMENT PRIMARY KEY,
         image_path VARCHAR(255) NOT NULL,
@@ -38,16 +40,35 @@ conn.commit()
 print("数据库表 edge 已清空，准备插入新数据...")
 
 
-# 形状不变矩特征提取（Hu Moments）
+# 图像预处理：去噪、归一化和图像缩放
+def preprocess_image(image, target_size=(128, 128)):
+    # 高斯滤波去噪
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+    # 将图像缩放到目标尺寸
+    image = cv2.resize(image, target_size)
+    return image
+
 def extract_hu_moments(image_path):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
         print(f"无法读取图像: {image_path}")
         return None
-    _, thresh = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+
+    image = preprocess_image(image)  # 预处理图像
+
+    # 使用Otsu阈值法自动计算最佳阈值
+    _, thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)  # Otsu 二值化
     moments = cv2.moments(thresh)
-    hu_moments = cv2.HuMoments(moments)
-    return hu_moments.flatten()
+    hu_moments = cv2.HuMoments(moments).flatten()
+
+    # 归一化Hu Moments
+    hu_moments = np.sign(hu_moments) * np.log10(np.abs(hu_moments) + 1e-6)  # 防止对数为负无穷
+
+    # 标准化Hu Moments
+    scaler = StandardScaler()
+    hu_moments = scaler.fit_transform(hu_moments.reshape(-1, 1)).flatten()
+
+    return hu_moments
 
 
 # 方向梯度直方图特征提取（HOG）
@@ -56,14 +77,15 @@ def extract_hog_features(image_path):
     if image is None:
         print(f"无法读取图像: {image_path}")
         return None
-    image = cv2.resize(image, (128, 128))  # 降低计算复杂度
+
+    image = preprocess_image(image)  # 预处理图像
     hog = cv2.HOGDescriptor()
     hog_features = hog.compute(image)
 
     if hog_features is not None:
         hog_features = hog_features.flatten()
 
-        # 降维（只取前500维）
+        # 降维
         if len(hog_features) > 500:
             hog_features = hog_features[:500]
 

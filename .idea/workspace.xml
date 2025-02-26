@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91971c87-227d-446d-b677-e7659d1067f6" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/99981eb0-119d-4413-873d-79c7a3098df3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/99981eb0-119d-4413-873d-79c7a3098df3.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getFeature/edgeFeature.py" beforeDir="false" afterPath="$PROJECT_DIR$/getFeature/edgeFeature.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbyedge.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchbyedge.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,33 +29,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Flask 服务器.Flask (app.py).executor": "Run",
-    "JavaScript 调试.cbir.html.executor": "Run",
-    "Python.colorFeature.executor": "Run",
-    "Python.edgeFeature.executor": "Run",
-    "Python.hashFeature.executor": "Run",
-    "Python.searchbytexture.executor": "Run",
-    "Python.siftFeature.executor": "Run",
-    "Python.textureFeature.executor": "Run",
-    "Python.vggFeature.executor": "Run",
-    "Python.vggFeature_keras.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Flask 服务器.Flask (app.py).executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 调试.cbir.html.executor&quot;: &quot;Run&quot;,
+    &quot;Python.colorFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.edgeFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.hashFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.searchbytexture.executor&quot;: &quot;Run&quot;,
+    &quot;Python.siftFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.textureFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vggFeature.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vggFeature_keras.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora_aws"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora_aws&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Flask 服务器.Flask (app.py)">
     <configuration name="cbir.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/test/HTML/cbir.html" useBuiltInWebServerPort="true">
       <method v="2" />
@@ -80,6 +83,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="edgeFeature" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/getFeature" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/getFeature/edgeFeature.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test" type="PythonConfigurationType" factoryName="Python">
       <module name="test" />
       <option name="ENV_FILES" value="" />
@@ -95,29 +121,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="vggFeature" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="test" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/getFeature" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/getFeature/vggFeature.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -168,10 +171,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Flask 服务器.Flask (app.py)" />
+        <item itemvalue="Python.edgeFeature" />
         <item itemvalue="JavaScript 调试.cbir.html" />
         <item itemvalue="Python.colorFeature" />
         <item itemvalue="Python.vggFeature_keras" />
-        <item itemvalue="Python.vggFeature" />
       </list>
     </recent_temporary>
   </component>
@@ -199,6 +202,7 @@
       <workItem from="1740400903421" duration="3127000" />
       <workItem from="1740456066650" duration="1493000" />
       <workItem from="1740539798895" duration="1462000" />
+      <workItem from="1740541842270" duration="5555000" />
     </task>
     <servers />
   </component>
@@ -207,11 +211,11 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/test$hashFeature.coverage" NAME="hashFeature 覆盖结果" MODIFIED="1740060274736" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
-    <SUITE FILE_PATH="coverage/test$edgeFeature.coverage" NAME="edgeFeature 覆盖结果" MODIFIED="1740060161410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$colorFeature.coverage" NAME="colorFeature 覆盖结果" MODIFIED="1740540184859" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
+    <SUITE FILE_PATH="coverage/test$edgeFeature.coverage" NAME="edgeFeature 覆盖结果" MODIFIED="1740549955266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$searchbytexture.coverage" NAME="searchbytexture 覆盖结果" MODIFIED="1740057986305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test$textureFeature.coverage" NAME="textureFeature 覆盖结果" MODIFIED="1740109754862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
-    <SUITE FILE_PATH="coverage/test$Flask__app_py_.coverage" NAME="Flask (app.py) 覆盖结果" MODIFIED="1740541032430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/test$Flask__app_py_.coverage" NAME="Flask (app.py) 覆盖结果" MODIFIED="1740550193468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/test$vggFeature.coverage" NAME="vggFeature 覆盖结果" MODIFIED="1740111706273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$siftFeature.coverage" NAME="siftFeature 覆盖结果" MODIFIED="1740108021954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$vggFeature_keras.coverage" NAME="vggFeature_keras 覆盖结果" MODIFIED="1740117794597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
