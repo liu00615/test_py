@@ -1,9 +1,10 @@
-import pickle  # 使用 pickle 序列化 SIFT 特征
+import pickle
 import cv2
 import mysql.connector
 import numpy as np
 from flask import Blueprint, request, jsonify
 from sklearn.metrics.pairwise import cosine_similarity
+from concurrent.futures import ThreadPoolExecutor
 
 # 创建Flask蓝图
 search_by_sift_route = Blueprint('searchbysift', __name__)
@@ -21,6 +22,8 @@ db_config = {
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
+# 线程池
+executor = ThreadPoolExecutor(max_workers=10)
 
 # SIFT特征提取函数
 def extract_sift_features(image):
@@ -29,6 +32,11 @@ def extract_sift_features(image):
     kp, des = sift.detectAndCompute(gray_image, None)
     return des
 
+# 计算相似度的函数
+def calculate_similarity(query_features, sift_features, img_id, img_path):
+    # 使用余弦相似度比较
+    similarity = cosine_similarity(query_features, sift_features)
+    return (img_id, img_path, similarity[0][0])
 
 # 搜索函数，基于SIFT特征
 @search_by_sift_route.route('/searchbysift', methods=['POST'])
@@ -55,17 +63,22 @@ def search_by_sift():
     cursor.execute("SELECT id, image_path, sift_features FROM sift")
     all_images = cursor.fetchall()
 
-    # 计算与每张图片的SIFT特征的相似度
-    similarities = []
+    # 并行计算每张图片与查询图片的相似度
+    futures = []
     for img in all_images:
         img_id, img_path, sift_feature_blob = img
 
         # 使用pickle反序列化二进制数据
         sift_features = pickle.loads(sift_feature_blob)
 
-        # 使用余弦相似度比较
-        similarity = cosine_similarity(query_features, sift_features)
-        similarities.append((img_id, img_path, similarity[0][0]))
+        if sift_features is None:
+            continue  # 跳过没有SIFT特征的图像
+
+        # 将任务提交给线程池
+        futures.append(executor.submit(calculate_similarity, query_features, sift_features, img_id, img_path))
+
+    # 获取所有线程的结果
+    similarities = [future.result() for future in futures]
 
     # 按照相似度排序，取前5张最相似的图片
     similarities.sort(key=lambda x: x[2], reverse=True)
