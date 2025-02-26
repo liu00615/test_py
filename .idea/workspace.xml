@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91971c87-227d-446d-b677-e7659d1067f6" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTML/cbir.html" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/cbir.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTML/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTML/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/HTML/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/getFeature/colorFeature.py" beforeDir="false" afterPath="$PROJECT_DIR$/getFeature/colorFeature.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbycolor.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchbycolor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +198,7 @@
       <workItem from="1740201350359" duration="596000" />
       <workItem from="1740400903421" duration="3127000" />
       <workItem from="1740456066650" duration="1493000" />
-      <workItem from="1740539798895" duration="1217000" />
+      <workItem from="1740539798895" duration="1462000" />
     </task>
     <servers />
   </component>
@@ -214,7 +211,7 @@
     <SUITE FILE_PATH="coverage/test$colorFeature.coverage" NAME="colorFeature 覆盖结果" MODIFIED="1740540184859" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$searchbytexture.coverage" NAME="searchbytexture 覆盖结果" MODIFIED="1740057986305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test$textureFeature.coverage" NAME="textureFeature 覆盖结果" MODIFIED="1740109754862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
-    <SUITE FILE_PATH="coverage/test$Flask__app_py_.coverage" NAME="Flask (app.py) 覆盖结果" MODIFIED="1740540739274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/test$Flask__app_py_.coverage" NAME="Flask (app.py) 覆盖结果" MODIFIED="1740541032430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/test$vggFeature.coverage" NAME="vggFeature 覆盖结果" MODIFIED="1740111706273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$siftFeature.coverage" NAME="siftFeature 覆盖结果" MODIFIED="1740108021954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
     <SUITE FILE_PATH="coverage/test$vggFeature_keras.coverage" NAME="vggFeature_keras 覆盖结果" MODIFIED="1740117794597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/getFeature" />
