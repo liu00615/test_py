@@ -43,12 +43,33 @@ print("数据库表texture已清空，准备插入新数据...")
 batch_size = 100
 count = 0
 
-# 提取 GLCM 特征
+
+# 图像预处理函数
+def preprocess_image(image, target_size=(256, 256)):
+    # 调整图像大小
+    image = cv2.resize(image, target_size)
+
+    # 去噪声，使用高斯模糊
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+
+    # 对比度增强，使用直方图均衡化
+    if len(image.shape) == 3:
+        # 对彩色图像进行YUV转换后只均衡Y通道
+        image_yuv = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
+        image_yuv[:, :, 0] = cv2.equalizeHist(image_yuv[:, :, 0])
+        image = cv2.cvtColor(image_yuv, cv2.COLOR_YUV2BGR)
+    else:
+        image = cv2.equalizeHist(image)  # 对灰度图像进行直方图均衡化
+
+    return image
+
+
+# 提取GLCM特征
 def extract_glcm_features(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     glcm = graycomatrix(gray_image, [1], [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4], symmetric=True, normed=True)
 
-    # 提取 GLCM 特征
+    # 提取GLCM特征
     features = [
         graycoprops(glcm, 'contrast').mean(),
         graycoprops(glcm, 'correlation').mean(),
@@ -59,12 +80,12 @@ def extract_glcm_features(image):
     return features
 
 
-# 提取 LBP 特征
+# 提取LBP特征
 def extract_lbp_features(image, radius=1, n_points=8):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     lbp = local_binary_pattern(gray_image, n_points, radius, method='uniform')
 
-    # 计算 LBP 直方图
+    # 计算LBP直方图
     lbp_hist, _ = np.histogram(lbp.ravel(), bins=np.arange(0, n_points + 3), range=(0, n_points + 2))
     lbp_hist = lbp_hist.astype(np.float32)
     lbp_hist /= (lbp_hist.sum() + 1e-6)  # 归一化
@@ -81,6 +102,9 @@ for root, _, files in os.walk(base_folder):
             if image is None:
                 print(f"无法读取图像: {image_path}")
                 continue
+
+            # 图像预处理
+            image = preprocess_image(image)
 
             # 提取特征
             glcm_features = extract_glcm_features(image)
