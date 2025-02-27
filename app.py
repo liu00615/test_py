@@ -5,7 +5,7 @@ from searchbycolor import search_by_color_route
 from searchbyedge import search_by_edge_route
 from searchbytexture import search_by_texture_route
 from searchbysift import search_by_sift_route
-from searchbyvgg import search_by_vgg_route
+from searchbyvgg_my import search_by_vgg_my_route
 from searchbyvgg_keras import search_by_vgg_keras_route
 from searchbyhash import search_by_hash_route
 
@@ -21,7 +21,7 @@ app.register_blueprint(search_by_color_route)
 app.register_blueprint(search_by_edge_route)
 app.register_blueprint(search_by_texture_route)
 app.register_blueprint(search_by_sift_route)
-app.register_blueprint(search_by_vgg_route)
+app.register_blueprint(search_by_vgg_my_route)
 app.register_blueprint(search_by_vgg_keras_route)
 app.register_blueprint(search_by_hash_route)
 

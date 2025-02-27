@@ -10,7 +10,7 @@ from tensorflow.keras import layers
 # from vggFeature import build_vgg16 # 导入会出发vggFeature自动执行，舍弃
 
 # 定义Flask蓝图
-search_by_vgg_route = Blueprint('searchbyvgg', __name__)
+search_by_vgg_my_route = Blueprint('searchbyvggmy', __name__)
 
 # 数据库连接配置
 db_config = {
@@ -101,7 +101,7 @@ def compute_similarity(query_features, db_features):
     # 计算余弦相似度
     return 1 - cdist(query_features.reshape(1, -1), db_features, metric='cosine')
 
-@search_by_vgg_route.route('/searchbyvgg', methods=['POST'])
+@search_by_vgg_my_route.route('/searchbyvggmy', methods=['POST'])
 def search_by_vgg():
     try:
         # 获取前端传递的图片文件

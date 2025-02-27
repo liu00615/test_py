@@ -35,7 +35,7 @@ function updateFeatureButtons(searchMethod) {
             button.classList.add("method-btn");
             button.textContent = method;
             button.setAttribute("data-method", method);
-            
+
             // 添加点击事件标记选中
             button.addEventListener("click", function() {
                 const selectedBtn = document.querySelector("#feature-buttons .method-btn.selected");
