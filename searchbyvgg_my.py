@@ -133,10 +133,10 @@ def search_by_vgg():
 
         # 获取最相似的图像
         most_similar_idx = np.argsort(similarities[0])[::-1]
-        top_5_images = [{"image_path": image_paths[i], "similarity": float(similarities[0][i])}
+        top_5_images = [{"image": image_paths[i], "similarity": float(similarities[0][i])}
                         for i in most_similar_idx[:5]]
 
-        return jsonify({"VGG_my": top_5_images})
+        return jsonify({"mine": top_5_images})
 
     except Exception as e:
         print(f"Error occurred: {e}")

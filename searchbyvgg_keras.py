@@ -91,7 +91,7 @@ def search_by_vgg_keras():
 
     # 返回前5个最相似的图像，并以符合要求的格式返回
     return jsonify({
-        "VGG16": [
+        "keras": [
             {"image": result['image'], "similarity": result['similarity']}
             for result in results[:5]
         ]

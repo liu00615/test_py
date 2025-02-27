@@ -3,7 +3,7 @@ const featureMethods = {
     "searchbyedge": ["HOG_Features", "Hu_Moments"],
     "searchbytexture": ["GLCM", "LBP"],
     "searchbysift": ["SIFT"],
-    "searchbyvggkeras": ["VGG16"],
+    "searchbyvgg": ["mine", "keras"],  // 修改为mine和keras
     "searchbyhash": ["aHash", "dHash", "pHash"]
 };
 
@@ -102,8 +102,21 @@ function submitImage() {
     var formData = new FormData();
     formData.append("file", file);
 
+    let searchURL = '';
+
+    // 根据选中的搜索方法确定相应的 URL
+    if (searchMethod === "searchbyvgg") {
+        if (featureMethod === "mine") {
+            searchURL = "http://127.0.0.1:5000/searchbyvggmy";
+        } else if (featureMethod === "keras") {
+            searchURL = "http://127.0.0.1:5000/searchbyvggkeras";
+        }
+    } else {
+        searchURL = `http://127.0.0.1:5000/${searchMethod}`;
+    }
+
     // 发送图片到指定的API
-    fetch(`http://127.0.0.1:5000/${searchMethod}`, {
+    fetch(searchURL, {
         method: 'POST',
         body: formData
     })
