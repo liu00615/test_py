@@ -123,7 +123,7 @@ def search_by_edge():
     if conn is None:
         return jsonify({"error": "数据库连接失败"}), 500
 
-    cursor.execute("SELECT id, image_path, hu_moments, hog_features FROM edge LIMIT 100")  # 仅获取前100条记录
+    cursor.execute("SELECT id, image_path, hu_moments, hog_features FROM edge LIMIT 3000")
     rows = cursor.fetchall()
 
     hu_results = []  # 存储基于 Hu 不变矩的搜索结果
